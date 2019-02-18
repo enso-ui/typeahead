@@ -155,7 +155,6 @@ export default {
                     this.fetch();
                 },
                 keydown: (e) => {
-                    console.log(e.key);
                     if (e.key === 'ArrowUp') {
                         this.keyUp();
                     }
