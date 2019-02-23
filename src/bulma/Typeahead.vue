@@ -5,7 +5,7 @@
         ref="typeahead">
         <template v-slot:default="{
                 items, loading, hasError, visibleDropdown, currentIndex,
-                updateIndex, highlight, inputEvents, itemEvents,
+                updateIndex, highlight, inputBindings, inputEvents, itemEvents,
             }">
             <div class="wrapper">
                 <div class="control has-icons-left has-icons-right"
