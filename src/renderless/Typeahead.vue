@@ -146,6 +146,9 @@ export default {
             currentIndex: this.currentIndex,
             updateIndex: this.updateIndex,
             highlight: this.highlight,
+            inputBindings: {
+                value: this.query,
+            },
             itemEvents: {
                 mousedown: () => this.hit(),
             },

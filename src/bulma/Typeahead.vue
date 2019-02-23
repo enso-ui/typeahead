@@ -1,5 +1,5 @@
 <template>
-    <renderless-typeahead :query="query"
+    <renderless-typeahead :query="value"
         v-bind="$attrs"
         v-on="$listeners"
         ref="typeahead">
@@ -13,15 +13,15 @@
                     <input class="input is-fullwidth"
                         :class="[{ 'is-rounded': isRounded }, { 'is-danger': hasError }]"
                         type="text"
-                        :value="query"
                         :disabled="disabled"
                         :placeholder="placeholder"
+                        v-bind="inputBindings"
                         v-on="inputEvents">
                     <span class="icon is-small is-left">
                         <fa icon="search"/>
                     </span>
                     <span class="icon is-small is-right clear-button"
-                        v-if="query && !loading"
+                        v-if="value && !loading"
                         @click="reset">
                         <a class="delete is-small"/>
                     </span>
@@ -74,10 +74,6 @@ library.add(faSearch);
 export default {
     components: { RenderlessTypeahead },
 
-    model: {
-        prop: 'query',
-    },
-
     props: {
         disabled: {
             type: Boolean,
@@ -103,7 +99,7 @@ export default {
             type: String,
             default: 'Searching...',
         },
-        query: {
+        value: {
             type: String,
             default: '',
         },
