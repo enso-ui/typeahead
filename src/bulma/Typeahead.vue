@@ -28,36 +28,38 @@
                 </div>
                 <slot name="controls"
                     :items="items"/>
-                <div class="dropdown typeahead"
-                    :class="{ 'is-active': visibleDropdown }">
-                    <div class="dropdown-menu">
-                        <div class="dropdown-content">
-                            <a href="#" class="dropdown-item"
-                                v-for="(item, index) in items"
-                                :key="JSON.stringify(item)"
-                                :class="{ 'is-active': index === currentIndex }"
-                                v-on="itemEvents"
-                                @mouseover="updateIndex(index)">
-                                <slot name="option"
-                                    :highlight="highlight"
-                                    :item="item"
-                                    :label="label">
-                                    <span v-html="highlight(item[label])"/>
-                                </slot>
-                            </a>
-                            <a href="#"
-                                class="dropdown-item"
-                                v-if="!items.length">
-                                <span v-if="loading">
-                                    {{ searching }}
-                                </span>
-                                <span v-else>
-                                    {{ noResults }}
-                                </span>
-                            </a>
+                <fade>
+                    <div class="dropdown typeahead is-active"
+                        v-if="visibleDropdown">
+                        <div class="dropdown-menu">
+                            <div class="dropdown-content">
+                                <a href="#" class="dropdown-item"
+                                    v-for="(item, index) in items"
+                                    :key="JSON.stringify(item)"
+                                    :class="{ 'is-active': index === currentIndex }"
+                                    v-on="itemEvents"
+                                    @mouseover="updateIndex(index)">
+                                    <slot name="option"
+                                        :highlight="highlight"
+                                        :item="item"
+                                        :label="label">
+                                        <span v-html="highlight(item[label])"/>
+                                    </slot>
+                                </a>
+                                <a href="#"
+                                    class="dropdown-item"
+                                    v-if="!items.length">
+                                    <span v-if="loading">
+                                        {{ searching }}
+                                    </span>
+                                    <span v-else>
+                                        {{ noResults }}
+                                    </span>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </fade>
             </div>
         </template>
     </renderless-typeahead>
@@ -67,12 +69,13 @@
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { Fade } from '@enso-ui/transitions';
 import RenderlessTypeahead from '../renderless/Typeahead.vue';
 
 library.add(faSearch);
 
 export default {
-    components: { RenderlessTypeahead },
+    components: { RenderlessTypeahead, Fade },
 
     props: {
         disabled: {
