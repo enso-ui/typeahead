@@ -1,5 +1,4 @@
 <script>
-
 import debounce from 'lodash/debounce';
 
 export default {
@@ -178,5 +177,4 @@ export default {
         });
     },
 };
-
 </script>

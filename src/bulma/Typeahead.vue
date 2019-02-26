@@ -14,7 +14,7 @@
                         :class="[{ 'is-rounded': isRounded }, { 'is-danger': hasError }]"
                         type="text"
                         :disabled="disabled"
-                        :placeholder="placeholder"
+                        :placeholder="i18n(placeholder)"
                         v-bind="inputBindings"
                         v-on="inputEvents">
                     <span class="icon is-small is-left">
@@ -50,10 +50,10 @@
                                     class="dropdown-item"
                                     v-if="!items.length">
                                     <span v-if="loading">
-                                        {{ searching }}
+                                        {{ i18n(searching) }}
                                     </span>
                                     <span v-else>
-                                        {{ noResults }}
+                                        {{ i18n(noResults) }}
                                     </span>
                                 </a>
                             </div>
@@ -66,7 +66,6 @@
 </template>
 
 <script>
-
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Fade } from '@enso-ui/transitions';
@@ -81,6 +80,10 @@ export default {
         disabled: {
             type: Boolean,
             default: false,
+        },
+        i18n: {
+            type: Function,
+            default: v => v,
         },
         isRounded: {
             type: Boolean,
@@ -114,11 +117,9 @@ export default {
         },
     },
 };
-
 </script>
 
 <style lang="scss" scoped>
-
     .wrapper {
         width: 100%;
 
@@ -146,5 +147,4 @@ export default {
             pointer-events: all;
         }
     }
-
 </style>
