@@ -2,6 +2,9 @@
 import debounce from 'lodash/debounce';
 
 export default {
+    model: {
+        event: 'selected',
+    },
     props: {
         debounce: {
             type: Number,
@@ -30,10 +33,6 @@ export default {
             type: Object,
             default: null,
         },
-        query: {
-            type: String,
-            default: '',
-        },
         regExp: {
             type: RegExp,
             default() {
@@ -44,15 +43,18 @@ export default {
             type: String,
             required: true,
         },
+        value: {
+            type: [String, Object],
+            default: null,
+        },
     },
-
     data: () => ({
         currentIndex: 0,
         items: [],
         hiddenDropdown: true,
         loading: false,
+        query: null,
     }),
-
     computed: {
         hasError() {
             return this.query && !this.regExp.test(this.query);
@@ -70,19 +72,15 @@ export default {
             };
         },
     },
-
     created() {
         this.fetch = debounce(this.fetch, this.debounce);
     },
-
     methods: {
         fetch() {
             if (!this.query || this.hasError) {
                 return;
             }
-
             this.loading = true;
-
             axios.get(this.source, this.requestParams)
                 .then(({ data }) => {
                     this.hiddenDropdown = false;
@@ -93,19 +91,14 @@ export default {
                     this.errorHandler(error);
                 });
         },
-        update(query = '') {
-            if (!query) {
-                this.items = [];
-            }
-
-            this.$emit('input', query);
+        clear() {
+            this.query = null;
+            this.items = [];
         },
-        hit() {
+        select() {
             const items = this.filter(this.items);
-
             if (this.visibleDropdown && items.length) {
-                this.update(items[this.currentIndex][this.label]);
-                this.$emit('update', items[this.currentIndex]);
+                this.query = items[this.currentIndex][this.label];
                 this.$emit('selected', items[this.currentIndex]);
                 this.hiddenDropdown = true;
             }
@@ -131,46 +124,44 @@ export default {
                         new RegExp(`(${word})`, 'gi'), '<b>$1</b>',
                     );
                 });
-
             return item;
         },
     },
-
     render() {
         return this.$scopedSlots.default({
+            query: this.query,
+            label: this.label,
             loading: this.loading,
             items: this.filter(this.items),
             hasError: this.hasError,
             visibleDropdown: this.visibleDropdown,
             currentIndex: this.currentIndex,
+            clear: this.clear,
             updateIndex: this.updateIndex,
             highlight: this.highlight,
             inputBindings: {
                 value: this.query,
             },
             itemEvents: {
-                mousedown: () => this.hit(),
+                mousedown: () => this.select(),
             },
             inputEvents: {
                 input: (e) => {
-                    this.update(e.target.value);
+                    this.query = e.target.value;
                     this.fetch();
                 },
                 keydown: (e) => {
                     if (e.key === 'ArrowUp') {
                         this.keyUp();
                     }
-
                     if (e.key === 'ArrowDown') {
                         this.keyDown();
                     }
-
                     if (e.key === 'Enter') {
-                        this.hit();
+                        this.select();
                     }
-
                     if (e.key === 'Escape') {
-                        this.update();
+                        this.clear();
                     }
                 },
             },

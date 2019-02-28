@@ -1,11 +1,11 @@
 <template>
-    <renderless-typeahead :query="value"
+    <renderless-typeahead
         v-bind="$attrs"
         v-on="$listeners"
         ref="typeahead">
         <template v-slot:default="{
-                items, loading, hasError, visibleDropdown, currentIndex,
-                updateIndex, highlight, inputBindings, inputEvents, itemEvents,
+                query, label, items, loading, hasError, visibleDropdown, currentIndex,
+                clear, updateIndex, highlight, inputBindings, inputEvents, itemEvents,
             }">
             <div class="wrapper">
                 <div class="control has-icons-left has-icons-right"
@@ -21,8 +21,8 @@
                         <fa icon="search"/>
                     </span>
                     <span class="icon is-small is-right clear-button"
-                        v-if="value && !loading"
-                        @click="reset">
+                        v-if="query && !loading"
+                        @click="clear">
                         <a class="delete is-small"/>
                     </span>
                 </div>
@@ -64,7 +64,6 @@
         </template>
     </renderless-typeahead>
 </template>
-
 <script>
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -72,10 +71,11 @@ import { Fade } from '@enso-ui/transitions';
 import RenderlessTypeahead from '../renderless/Typeahead.vue';
 
 library.add(faSearch);
-
 export default {
     components: { RenderlessTypeahead, Fade },
-
+    model: {
+        event: 'selected',
+    },
     props: {
         disabled: {
             type: Boolean,
@@ -89,10 +89,6 @@ export default {
             type: Boolean,
             default: false,
         },
-        label: {
-            type: String,
-            default: 'label',
-        },
         noResults: {
             type: String,
             default: 'Nothing found...',
@@ -105,15 +101,10 @@ export default {
             type: String,
             default: 'Searching...',
         },
-        value: {
-            type: String,
-            default: '',
-        },
     },
-
     methods: {
-        reset() {
-            this.$refs.typeahead.update();
+        clear() {
+            this.$refs.typeahead.clear();
         },
     },
 };
@@ -122,18 +113,14 @@ export default {
 <style lang="scss" scoped>
     .wrapper {
         width: 100%;
-
         .dropdown.typeahead {
             width: calc(100% - 1.4em);
             position: absolute;
-
             .dropdown-menu {
                 width: 100%;
-
                 .dropdown-content {
                     max-height: 20em;
                     overflow-y: scroll;
-
                     a.dropdown-item {
                         text-overflow: ellipsis;
                         overflow-x: hidden;
@@ -142,7 +129,6 @@ export default {
                 }
             }
         }
-
         .control.has-icons-right .icon.clear-button {
             pointer-events: all;
         }
