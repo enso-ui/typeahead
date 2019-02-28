@@ -1,4 +1,3 @@
-import Typeahead from '../src/bulma/Typeahead.vue';
-import EnsoTypeahead from '../src/bulma/EnsoTypeahead.vue';
+import Typeahead from '../src/renderless/Typeahead.vue';
 
-export { Typeahead, EnsoTypeahead };
+export default Typeahead;
