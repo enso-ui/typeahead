@@ -77,9 +77,15 @@ export default {
     },
     methods: {
         fetch() {
-            if (!this.query || this.hasError) {
+            if (this.hasError) {
                 return;
             }
+
+            if (!this.query) {
+                this.items = [];
+                return;
+            }
+
             this.loading = true;
             axios.get(this.source, this.requestParams)
                 .then(({ data }) => {
@@ -97,6 +103,7 @@ export default {
         },
         select() {
             const items = this.filter(this.items);
+
             if (this.visibleDropdown && items.length) {
                 this.query = items[this.currentIndex][this.label];
                 this.$emit('selected', items[this.currentIndex]);
@@ -131,19 +138,20 @@ export default {
         return this.$scopedSlots.default({
             query: this.query,
             label: this.label,
-            loading: this.loading,
             items: this.filter(this.items),
+            loading: this.loading,
             hasError: this.hasError,
-            visibleDropdown: this.visibleDropdown,
             currentIndex: this.currentIndex,
-            clear: this.clear,
-            updateIndex: this.updateIndex,
             highlight: this.highlight,
+            clearBindings: {
+                click: this.clear,
+            },
+            itemEvents: index => ({
+                mouseover: () => this.updateIndex(index),
+                mousedown: () => this.select(),
+            }),
             inputBindings: {
                 value: this.query,
-            },
-            itemEvents: {
-                mousedown: () => this.select(),
             },
             inputEvents: {
                 input: (e) => {

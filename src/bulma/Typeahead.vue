@@ -4,77 +4,79 @@
         v-on="$listeners"
         ref="typeahead">
         <template v-slot:default="{
-                query, label, items, loading, hasError, visibleDropdown, currentIndex,
-                clear, updateIndex, highlight, inputBindings, inputEvents, itemEvents,
+                query, label, items, loading, hasError, currentIndex, highlight,
+                clearBindings, inputBindings, inputEvents, itemEvents,
             }">
-            <div class="wrapper">
-                <div class="control has-icons-left has-icons-right"
-                    :class="{ 'is-loading': loading }">
-                    <input class="input is-fullwidth"
-                        :class="[{ 'is-rounded': isRounded }, { 'is-danger': hasError }]"
-                        type="text"
-                        :disabled="disabled"
-                        :placeholder="i18n(placeholder)"
-                        v-bind="inputBindings"
-                        v-on="inputEvents">
-                    <span class="icon is-small is-left">
-                        <fa icon="search"/>
-                    </span>
-                    <span class="icon is-small is-right clear-button"
-                        v-if="query && !loading"
-                        @click="clear">
-                        <a class="delete is-small"/>
-                    </span>
-                </div>
-                <slot name="controls"
-                    :items="items"/>
-                <fade>
-                    <div class="dropdown typeahead is-active"
-                        v-if="visibleDropdown">
-                        <div class="dropdown-menu">
-                            <div class="dropdown-content">
-                                <a href="#" class="dropdown-item"
-                                    v-for="(item, index) in items"
-                                    :key="JSON.stringify(item)"
-                                    :class="{ 'is-active': index === currentIndex }"
-                                    v-on="itemEvents"
-                                    @mouseover="updateIndex(index)">
-                                    <slot name="option"
-                                        :highlight="highlight"
-                                        :item="item"
-                                        :label="label">
-                                        <span v-html="highlight(item[label])"/>
-                                    </slot>
-                                </a>
-                                <a href="#"
-                                    class="dropdown-item"
-                                    v-if="!items.length">
-                                    <span v-if="loading">
-                                        {{ i18n(searching) }}
-                                    </span>
-                                    <span v-else>
-                                        {{ i18n(noResults) }}
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
+            <dropdown class="typeahead"
+                width="100%"
+                :disabled="!query">
+                <template v-slot:dropdown-trigger>
+                    <div class="control has-icons-left has-icons-right"
+                        :class="{ 'is-loading': loading }">
+                        <input class="input is-fullwidth"
+                            :class="[{ 'is-rounded': isRounded }, { 'is-danger': hasError }]"
+                            type="text"
+                            :disabled="disabled"
+                            :placeholder="i18n(placeholder)"
+                            v-bind="inputBindings"
+                            v-on="inputEvents">
+                        <span class="icon is-small is-left">
+                            <fa icon="search"/>
+                        </span>
+                        <span class="icon is-small is-right clear-button"
+                            v-on="clearBindings"
+                            v-if="query && !loading">
+                            <a class="delete is-small"/>
+                        </span>
                     </div>
-                </fade>
-            </div>
+                    <slot name="controls"
+                        :items="items"/>
+                </template>
+                <template v-slot:dropdown-content>
+                    <a class="dropdown-item"
+                        v-for="(item, index) in items"
+                        :key="index"
+                        :class="{ 'is-active': index === currentIndex }"
+                        v-on="itemEvents(index)">
+                        <slot name="option"
+                            :highlight="highlight"
+                            :item="item"
+                            :label="label">
+                            <span v-html="highlight(item[label])"/>
+                        </slot>
+                    </a>
+                    <template v-if="!items.length">
+                        <a class="dropdown-item"
+                            v-if="loading">
+                            <span v-if="loading">
+                                {{ i18n(searching) }}
+                            </span>
+                        </a>
+                        <a class="dropdown-item"
+                            v-else-if="query">
+                            <span>
+                                {{ i18n(noResults) }}
+                            </span>
+                        </a>
+                    </template>
+                </template>
+            </dropdown>
         </template>
     </core-typeahead>
 </template>
+
 <script>
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { Fade } from '@enso-ui/transitions';
+import Dropdown from '@enso-ui/dropdown/bulma';
+import DropdownIndicator from '@enso-ui/dropdown-indicator';
 import CoreTypeahead from '../renderless/Typeahead.vue';
 
 library.add(faSearch);
 export default {
     name: 'Typeahead',
 
-    components: { CoreTypeahead, Fade },
+    components: { CoreTypeahead, Dropdown, DropdownIndicator },
 
     model: {
         event: 'selected',
