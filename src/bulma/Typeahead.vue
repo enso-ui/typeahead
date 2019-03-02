@@ -1,5 +1,5 @@
 <template>
-    <renderless-typeahead
+    <core-typeahead
         v-bind="$attrs"
         v-on="$listeners"
         ref="typeahead">
@@ -62,17 +62,20 @@
                 </fade>
             </div>
         </template>
-    </renderless-typeahead>
+    </core-typeahead>
 </template>
 <script>
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Fade } from '@enso-ui/transitions';
-import RenderlessTypeahead from '../renderless/Typeahead.vue';
+import CoreTypeahead from '../renderless/Typeahead.vue';
 
 library.add(faSearch);
 export default {
-    components: { RenderlessTypeahead, Fade },
+    name: 'Typeahead',
+
+    components: { CoreTypeahead, Fade },
+
     model: {
         event: 'selected',
     },

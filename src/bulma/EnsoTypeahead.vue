@@ -8,6 +8,8 @@
 import Typeahead from './Typeahead.vue';
 
 export default {
+    name: 'EnsoTypeahead',
+
     components: { Typeahead },
 };
 </script>
