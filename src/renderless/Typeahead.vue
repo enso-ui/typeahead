@@ -51,16 +51,12 @@ export default {
     data: () => ({
         currentIndex: 0,
         items: [],
-        hiddenDropdown: true,
         loading: false,
         query: null,
     }),
     computed: {
         hasError() {
             return this.query && !this.regExp.test(this.query);
-        },
-        visibleDropdown() {
-            return !this.hiddenDropdown && !!this.query && !this.hasError;
         },
         requestParams() {
             return {
@@ -87,9 +83,9 @@ export default {
             }
 
             this.loading = true;
+
             axios.get(this.source, this.requestParams)
                 .then(({ data }) => {
-                    this.hiddenDropdown = false;
                     this.items = data;
                     this.loading = false;
                 }).catch((error) => {
@@ -104,24 +100,43 @@ export default {
         select() {
             const items = this.filter(this.items);
 
-            if (this.visibleDropdown && items.length) {
+            if (items.length) {
                 this.query = items[this.currentIndex][this.label];
                 this.$emit('selected', items[this.currentIndex]);
-                this.hiddenDropdown = true;
+                this.currentIndex = 0;
+                this.query = '';
             }
         },
-        keyUp() {
-            if (this.currentIndex > 0) {
-                this.currentIndex--;
+        nextIndex() {
+            if (this.loading) {
+                return;
             }
-        },
-        keyDown() {
-            if (this.currentIndex < this.items.length - 1) {
-                this.currentIndex++;
+
+            if (++this.currentIndex > this.items.length - 1) {
+                this.currentIndex = 0;
             }
+
+            this.scrollIntoView();
         },
-        updateIndex(index) {
+        previousIndex() {
+            if (this.loading) {
+                return;
+            }
+
+            if (--this.currentIndex < 0) {
+                this.currentIndex = this.items.length - 1;
+            }
+
+            this.scrollIntoView();
+        },
+        updateCurrentIndex(index) {
             this.currentIndex = index;
+        },
+        scrollIntoView() {
+            const options = this.$el.querySelectorAll('.dropdown-item.option');
+
+            options[this.currentIndex]
+                .scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         },
         highlight(item) {
             this.query.split(' ')
@@ -147,7 +162,7 @@ export default {
                 click: this.clear,
             },
             itemEvents: index => ({
-                mouseover: () => this.updateIndex(index),
+                mouseover: () => this.updateCurrentIndex(index),
                 mousedown: () => this.select(),
             }),
             inputBindings: {
@@ -160,14 +175,16 @@ export default {
                 },
                 keydown: (e) => {
                     if (e.key === 'ArrowUp') {
-                        this.keyUp();
+                        this.previousIndex();
                     }
                     if (e.key === 'ArrowDown') {
-                        this.keyDown();
+                        this.nextIndex();
                     }
                     if (e.key === 'Enter') {
                         this.select();
                     }
+                },
+                keyup: (e) => {
                     if (e.key === 'Escape') {
                         this.clear();
                     }

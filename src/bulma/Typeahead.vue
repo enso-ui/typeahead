@@ -9,8 +9,10 @@
             }">
             <dropdown class="typeahead"
                 width="100%"
-                :disabled="!query">
-                <template v-slot:dropdown-trigger>
+                heigth="16em"
+                :disabled="!query"
+                manual>
+                <template v-slot:trigger="{ open }">
                     <div class="control has-icons-left has-icons-right"
                         :class="{ 'is-loading': loading }">
                         <input class="input is-fullwidth"
@@ -18,6 +20,7 @@
                             type="text"
                             :disabled="disabled"
                             :placeholder="i18n(placeholder)"
+                            @keyup="open"
                             v-bind="inputBindings"
                             v-on="inputEvents">
                         <span class="icon is-small is-left">
@@ -29,11 +32,13 @@
                             <a class="delete is-small"/>
                         </span>
                     </div>
+                </template>
+                <template v-slot:controls>
                     <slot name="controls"
                         :items="items"/>
                 </template>
-                <template v-slot:dropdown-content>
-                    <a class="dropdown-item"
+                <template v-slot:options>
+                    <a class="dropdown-item option"
                         v-for="(item, index) in items"
                         :key="index"
                         :class="{ 'is-active': index === currentIndex }"
@@ -69,14 +74,13 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from '@enso-ui/dropdown/bulma';
-import DropdownIndicator from '@enso-ui/dropdown-indicator';
 import CoreTypeahead from '../renderless/Typeahead.vue';
 
 library.add(faSearch);
 export default {
     name: 'Typeahead',
 
-    components: { CoreTypeahead, Dropdown, DropdownIndicator },
+    components: { CoreTypeahead, Dropdown },
 
     model: {
         event: 'selected',
