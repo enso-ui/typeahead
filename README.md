@@ -1,22 +1,49 @@
 # Typeahead
 
-[![License](https://poser.pugx.org/laravel-enso/typeahead/license)](https://packagist.org/packages/laravel-enso/typeahead)
-[![Latest Stable Version](https://poser.pugx.org/laravel-enso/typeahead/version)](https://packagist.org/packages/laravel-enso/typeahead)
+![npm license](https://img.shields.io/npm/l/@enso-ui/typeahead.svg) 
+![npm download](https://img.shields.io/npm/dm/@enso-ui/typeahead.svg) 
+![GitHub top language](https://img.shields.io/github/languages/top/enso-ui/typeahead.svg) 
+![GitHub issues](https://img.shields.io/github/issues/enso-ui/typeahead.svg) 
+![npm version](https://img.shields.io/npm/v/@enso-ui/typeahead.svg) 
 
 Vue Typeahead
 
-### Features
+## Usage
+Unless where specified otherwise, the components can be used outside of the Enso ecosystem.
 
-- soon
+### Demo
 
-### Configuration & Usage
+For live examples and demos, you may visit [laravel-enso.com](https://www.laravel-enso.com)
 
-- soon
+Check the full documentation at  [docs.laravel-enso.com](https://docs.laravel-enso.com).### Installation
 
-### Contributions
+### Installation
+
+Install the package:
+```
+npm i @enso-ui/typeahead
+```
+Import the desired component(s):
+```js
+import { Typeahead, EnsoTypeahead } from '@enso-ui/typeahead/bulma';
+```
+
+### Exports
+
+`@enso-ui/typeahead/bulma`:
+- `Typeahead`,
+- `EnsoTypeahead`,
+
+`@enso-ui/typeahead/renderless`:
+- `Typeahead`,
+
+
+## Contributions
 
 are welcome. Pull requests are great, but issues are good too.
 
-### License
+Thank you to all the people who already contributed to Enso!
 
-This package is released under the MIT license.
+## License
+
+[ISC](https://opensource.org/licenses/ISC)
