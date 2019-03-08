@@ -36,7 +36,7 @@ import { Typeahead, EnsoTypeahead } from '@enso-ui/typeahead/bulma';
 - `EnsoTypeahead`,
 
 `@enso-ui/typeahead/renderless`:
-- `Typeahead`,
+- `CoreTypeahead`,
 
 
 ## Contributions
