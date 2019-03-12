@@ -8,8 +8,6 @@
                 clearBindings, inputBindings, inputEvents, itemEvents,
             }">
             <dropdown class="typeahead"
-                width="100%"
-                heigth="16em"
                 :disabled="!query"
                 manual>
                 <template v-slot:trigger="{ open }">
@@ -119,27 +117,31 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-    .wrapper {
+<style lang="scss">
+    .dropdown.typeahead {
         width: 100%;
-        .dropdown.typeahead {
-            width: calc(100% - 1.4em);
-            position: absolute;
-            .dropdown-menu {
+
+        .dropdown-trigger {
+            width: 100%;
+        }
+
+        .dropdown-menu {
+            width: 100%;
+
+            .dropdown-content {
                 width: 100%;
-                .dropdown-content {
-                    max-height: 20em;
-                    overflow-y: scroll;
-                    a.dropdown-item {
-                        text-overflow: ellipsis;
-                        overflow-x: hidden;
-                        padding-right: 1em;
-                    }
+                max-height: 20em;
+                overflow-y: scroll;
+                a.dropdown-item {
+                    width: 100%;
+                    text-overflow: ellipsis;
+                    overflow-x: hidden;
+                    padding-right: 1em;
                 }
             }
         }
-        .control.has-icons-right .icon.clear-button {
-            pointer-events: all;
-        }
+    }
+    .control.has-icons-right .icon.clear-button {
+        pointer-events: all;
     }
 </style>
