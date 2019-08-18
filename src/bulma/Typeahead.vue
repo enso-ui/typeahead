@@ -109,6 +109,7 @@ export default {
             default: 'Searching...',
         },
     },
+
     methods: {
         clear() {
             this.$refs.typeahead.clear();
