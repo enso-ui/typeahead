@@ -21,7 +21,7 @@ import Typeahead from './Typeahead.vue';
 export default {
     name: 'EnsoTypeahead',
 
-    inject: ['i18n'],
+    inject: ['i18n', 'route'],
 
     components: { Typeahead },
 
