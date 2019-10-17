@@ -131,17 +131,24 @@ export default {
 
             .dropdown-content {
                 width: 100%;
-                max-height: 20em;
-                overflow-y: scroll;
-                a.dropdown-item {
+
+                .options {
+                    max-height: 20.5em;
                     width: 100%;
-                    text-overflow: ellipsis;
-                    overflow-x: hidden;
-                    padding-right: 1em;
+                    overflow: auto;
+
+                    a.dropdown-item {
+                        width: 100%;
+                        text-overflow: ellipsis;
+                        overflow-x: hidden;
+                        padding-right: 1em;
+                    }
                 }
+
             }
         }
     }
+
     .control.has-icons-right .icon.clear-button {
         pointer-events: all;
     }
