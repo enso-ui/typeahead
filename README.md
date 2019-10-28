@@ -10,34 +10,15 @@ Vue Typeahead
 
 ## Usage
 
-Unless where specified otherwise, the components can be used outside of the Enso ecosystem.
+The components can be used outside of the Enso ecosystem.
 
 ### Demo
 
 For live examples and demos, you may visit [laravel-enso.com](https://www.laravel-enso.com)
 
-Check the full documentation at  [docs.laravel-enso.com](https://docs.laravel-enso.com).
+### Installation, Configuration & Usage
 
-### Installation
-
-Install the package:
-```
-npm i @enso-ui/typeahead
-```
-Import the desired component(s):
-```js
-import { Typeahead, EnsoTypeahead } from '@enso-ui/typeahead/bulma';
-```
-
-### Exports
-
-`@enso-ui/typeahead/bulma`:
-- `Typeahead`,
-- `EnsoTypeahead`,
-
-`@enso-ui/typeahead/renderless`:
-- `CoreTypeahead`,
-
+Be sure to check out the full documentation for this package available at [docs.laravel-enso.com](https://docs.laravel-enso.com/frontend/typeahead.html)
 
 ## Contributions
 
