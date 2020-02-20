@@ -7,7 +7,12 @@ export default {
     model: {
         event: 'selected',
     },
+
     props: {
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
         debounce: {
             type: Number,
             default: 250,
@@ -22,6 +27,10 @@ export default {
         filter: {
             type: Function,
             default: items => (items),
+        },
+        i18n: {
+            type: Function,
+            default: v => v,
         },
         label: {
             type: String,
@@ -50,12 +59,14 @@ export default {
             default: null,
         },
     },
+
     data: () => ({
         currentIndex: 0,
         items: [],
         loading: false,
         query: null,
     }),
+
     computed: {
         hasError() {
             return this.query && !this.regExp.test(this.query);
@@ -70,10 +81,16 @@ export default {
             };
         },
     },
+
     created() {
         this.fetch = debounce(this.fetch, this.debounce);
     },
+
     methods: {
+        clear() {
+            this.query = null;
+            this.items = [];
+        },
         fetch() {
             if (this.hasError) {
                 return;
@@ -95,9 +112,16 @@ export default {
                     this.errorHandler(error);
                 });
         },
-        clear() {
-            this.query = null;
-            this.items = [];
+        highlight(item) {
+            this.query.split(' ').filter(word => word.length)
+                .forEach(word => (item = item.replace(
+                    new RegExp(`(${word})`, 'gi'), '<b>$1</b>',
+                )));
+
+            return item;
+        },
+        isCurrent(index) {
+            return index === this.currentIndex;
         },
         select() {
             const items = this.filter(this.items);
@@ -109,82 +133,22 @@ export default {
                 this.query = '';
             }
         },
-        nextIndex() {
-            if (this.loading) {
-                return;
-            }
-
-            if (++this.currentIndex > this.items.length - 1) {
-                this.currentIndex = 0;
-            }
-
-            this.scrollIntoView();
-        },
-        previousIndex() {
-            if (this.loading) {
-                return;
-            }
-
-            if (--this.currentIndex < 0) {
-                this.currentIndex = this.items.length - 1;
-            }
-
-            this.scrollIntoView();
-        },
-        updateCurrentIndex(index) {
+        updateCurrent(index) {
             this.currentIndex = index;
-        },
-        scrollIntoView() {
-            const options = this.$el.querySelectorAll('.dropdown-item.option');
-
-            options[this.currentIndex]
-                .scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        },
-        highlight(item) {
-            this.query.split(' ')
-                .filter(word => word.length)
-                .forEach((word) => {
-                    item = item.replace(
-                        new RegExp(`(${word})`, 'gi'), '<b>$1</b>',
-                    );
-                });
-            return item;
         },
     },
     render() {
         return this.$scopedSlots.default({
-            query: this.query,
-            label: this.label,
-            items: this.filter(this.items),
-            loading: this.loading,
+            clearBindings: { click: this.clear },
+            disabled: this.disabled,
             hasError: this.hasError,
-            currentIndex: this.currentIndex,
             highlight: this.highlight,
-            clearBindings: {
-                click: this.clear,
-            },
-            itemEvents: index => ({
-                mouseover: () => this.updateCurrentIndex(index),
-                mousedown: () => this.select(),
-            }),
-            inputBindings: {
-                value: this.query,
-            },
+            i18n: this.i18n,
+            inputBindings: { value: this.query },
             inputEvents: {
                 input: (e) => {
                     this.query = e.target.value;
                     this.fetch();
-                },
-                keydown: (e) => {
-                    if (e.key === 'ArrowUp') {
-                        this.previousIndex();
-                    }
-                    if (e.key === 'ArrowDown') {
-                        this.nextIndex();
-                    }
-                    if (e.key === 'Enter') {
-                        this.select();
-                    }
                 },
                 keyup: (e) => {
                     if (e.key === 'Escape') {
@@ -192,6 +156,17 @@ export default {
                     }
                 },
             },
+            itemEvents: index => ({
+                mouseover: () => this.updateCurrentIndex(index),
+                mousedown: () => this.select(),
+            }),
+            isCurrent: this.isCurrent,
+            items: this.filter(this.items),
+            label: this.label,
+            loading: this.loading,
+            query: this.query,
+            select: this.select,
+            updateCurrent: this.updateCurrent,
         });
     },
 };

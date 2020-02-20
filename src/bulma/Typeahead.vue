@@ -4,13 +4,14 @@
         v-on="$listeners"
         ref="typeahead">
         <template v-slot:default="{
-                query, label, items, loading, hasError, currentIndex, highlight,
-                clearBindings, inputBindings, inputEvents, itemEvents,
+                clearBindings, disabled, hasError, highlight, i18n, isCurrent, inputBindings,
+                inputEvents, items, itemEvents,label, loading, query, select, updateCurrent,
             }">
             <dropdown class="typeahead"
                 :disabled="!query"
-                manual>
-                <template v-slot:trigger="{ open }">
+                manual
+                @update-index="updateCurrent">
+                <template v-slot:trigger="{ show }">
                     <div class="control has-icons-left has-icons-right"
                         :class="{ 'is-loading': loading }">
                         <input class="input is-fullwidth"
@@ -18,8 +19,8 @@
                             type="text"
                             :disabled="disabled"
                             :placeholder="i18n(placeholder)"
-                            @keyup="open"
                             v-bind="inputBindings"
+                            @keyup="show"
                             v-on="inputEvents">
                         <span class="icon is-small is-left">
                             <fa icon="search"/>
@@ -35,33 +36,32 @@
                     <slot name="controls"
                         :items="items"/>
                 </template>
-                <template v-slot:options>
-                    <a class="dropdown-item option"
-                        v-for="(item, index) in items"
+                <template v-slot:items="props">
+                    <dropdown-item v-for="(item, index) in items"
                         :key="index"
-                        :class="{ 'is-active': index === currentIndex }"
-                        v-on="itemEvents(index)">
+                        v-bind="props.itemBindings(isCurrent(index), index)"
+                        v-on="{ ...props.itemEvents(index), ...itemEvents }">
                         <slot name="option"
                             :highlight="highlight"
                             :item="item"
                             :label="label">
                             <span v-html="highlight(item[label])"/>
                         </slot>
-                    </a>
-                    <template v-if="!items.length">
-                        <a class="dropdown-item"
-                            v-if="loading">
-                            <span v-if="loading">
-                                {{ i18n(searching) }}
-                            </span>
-                        </a>
-                        <a class="dropdown-item"
-                            v-else-if="query">
-                            <span>
-                                {{ i18n(noResults) }}
-                            </span>
-                        </a>
-                    </template>
+                        <template v-if="!items.length">
+                            <a class="dropdown-item"
+                                v-if="loading">
+                                <span v-if="loading">
+                                    {{ i18n(searching) }}
+                                </span>
+                            </a>
+                            <a class="dropdown-item"
+                                v-else-if="query">
+                                <span>
+                                    {{ i18n(noResults) }}
+                                </span>
+                            </a>
+                        </template>
+                    </dropdown-item>
                 </template>
             </dropdown>
         </template>
@@ -71,27 +71,19 @@
 <script>
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import Dropdown from '@enso-ui/dropdown/bulma';
+import { Dropdown, DropdownItem } from '@enso-ui/dropdown/bulma';
 import CoreTypeahead from '../renderless/Typeahead.vue';
 
 library.add(faSearch);
 export default {
     name: 'Typeahead',
 
-    components: { CoreTypeahead, Dropdown },
+    components: { CoreTypeahead, Dropdown, DropdownItem },
 
     model: {
         event: 'selected',
     },
     props: {
-        disabled: {
-            type: Boolean,
-            default: false,
-        },
-        i18n: {
-            type: Function,
-            default: v => v,
-        },
         isRounded: {
             type: Boolean,
             default: false,
