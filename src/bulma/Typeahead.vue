@@ -5,7 +5,7 @@
         ref="typeahead">
         <template v-slot:default="{
                 clearBindings, disabled, hasError, highlight, i18n, inputBindings,
-                inputEvents, items, label, loading, query,
+                inputEvents, items, label, loading, query, select,
             }">
             <dropdown class="typeahead"
                 :disabled="!query"
@@ -37,7 +37,8 @@
                 </template>
                 <template v-slot:items>
                     <dropdown-item v-for="(item, index) in items"
-                        :key="index">
+                        :key="index"
+                        @select="select(index)">
                         <slot name="option"
                             :highlight="highlight"
                             :item="item"
@@ -77,9 +78,6 @@ export default {
 
     components: { CoreTypeahead, Dropdown, DropdownItem },
 
-    model: {
-        event: 'selected',
-    },
     props: {
         isRounded: {
             type: Boolean,

@@ -119,6 +119,14 @@ export default {
 
             return item;
         },
+        select(index) {
+            const items = this.filter(this.items);
+
+            if (items.length) {
+                this.query = items[index][this.label];
+                this.$emit('selected', items[index]);
+            }
+        },
     },
     render() {
         return this.$scopedSlots.default({
@@ -143,6 +151,7 @@ export default {
             label: this.label,
             loading: this.loading,
             query: this.query,
+            select: this.select,
         });
     },
 };
