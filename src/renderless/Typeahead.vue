@@ -147,6 +147,13 @@ export default {
                     }
                 },
             },
+            itemBindings: index => ({
+                key: index,
+                selected: false,
+            }),
+            itemEvents: index => ({
+                select: () => this.select(index),
+            }),
             items: this.filter(this.items),
             label: this.label,
             loading: this.loading,

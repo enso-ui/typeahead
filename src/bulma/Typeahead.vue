@@ -5,7 +5,7 @@
         ref="typeahead">
         <template v-slot:default="{
                 clearBindings, disabled, hasError, highlight, i18n, inputBindings,
-                inputEvents, items, label, loading, query, select,
+                inputEvents, itemBindings, itemEvents, items, label, loading, query,
             }">
             <dropdown class="typeahead"
                 :disabled="!query"
@@ -37,8 +37,8 @@
                 </template>
                 <template v-slot:items>
                     <dropdown-item v-for="(item, index) in items"
-                        :key="index"
-                        @select="select(index)">
+                        v-bind="itemBindings(index)"
+                        v-on="itemEvents(index)">
                         <slot name="option"
                             :highlight="highlight"
                             :item="item"
