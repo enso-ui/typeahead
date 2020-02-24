@@ -4,13 +4,12 @@
         v-on="$listeners"
         ref="typeahead">
         <template v-slot:default="{
-                clearBindings, disabled, hasError, highlight, i18n, isCurrent, inputBindings,
-                inputEvents, items, itemEvents,label, loading, query, select, updateCurrent,
+                clearBindings, disabled, hasError, highlight, i18n, inputBindings,
+                inputEvents, items, label, loading, query,
             }">
             <dropdown class="typeahead"
                 :disabled="!query"
-                manual
-                @update-index="updateCurrent">
+                manual>
                 <template v-slot:trigger="{ show }">
                     <div class="control has-icons-left has-icons-right"
                         :class="{ 'is-loading': loading }">
@@ -36,11 +35,9 @@
                     <slot name="controls"
                         :items="items"/>
                 </template>
-                <template v-slot:items="props">
+                <template v-slot:items>
                     <dropdown-item v-for="(item, index) in items"
-                        :key="index"
-                        v-bind="props.itemBindings(isCurrent(index), index)"
-                        v-on="{ ...props.itemEvents(index), ...itemEvents }">
+                        :key="index">
                         <slot name="option"
                             :highlight="highlight"
                             :item="item"

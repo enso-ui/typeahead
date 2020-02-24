@@ -61,7 +61,6 @@ export default {
     },
 
     data: () => ({
-        currentIndex: 0,
         items: [],
         loading: false,
         query: null,
@@ -120,22 +119,6 @@ export default {
 
             return item;
         },
-        isCurrent(index) {
-            return index === this.currentIndex;
-        },
-        select() {
-            const items = this.filter(this.items);
-
-            if (items.length) {
-                this.query = items[this.currentIndex][this.label];
-                this.$emit('selected', items[this.currentIndex]);
-                this.currentIndex = 0;
-                this.query = '';
-            }
-        },
-        updateCurrent(index) {
-            this.currentIndex = index;
-        },
     },
     render() {
         return this.$scopedSlots.default({
@@ -156,17 +139,10 @@ export default {
                     }
                 },
             },
-            itemEvents: index => ({
-                mouseover: () => this.updateCurrentIndex(index),
-                mousedown: () => this.select(),
-            }),
-            isCurrent: this.isCurrent,
             items: this.filter(this.items),
             label: this.label,
             loading: this.loading,
             query: this.query,
-            select: this.select,
-            updateCurrent: this.updateCurrent,
         });
     },
 };
