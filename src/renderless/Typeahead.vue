@@ -147,10 +147,6 @@ export default {
                     }
                 },
             },
-            itemBindings: index => ({
-                key: index,
-                selected: false,
-            }),
             itemEvents: index => ({
                 select: () => this.select(index),
             }),
