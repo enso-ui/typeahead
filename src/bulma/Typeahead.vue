@@ -46,21 +46,15 @@
                             :label="label">
                             <span v-html="highlight(item[label])"/>
                         </slot>
-                        <template v-if="!items.length">
-                            <a class="dropdown-item"
-                                v-if="loading">
-                                <span v-if="loading">
-                                    {{ i18n(searching) }}
-                                </span>
-                            </a>
-                            <a class="dropdown-item"
-                                v-else-if="query">
-                                <span>
-                                    {{ i18n(noResults) }}
-                                </span>
-                            </a>
-                        </template>
                     </dropdown-item>
+                    <template v-if="!items.length">
+                        <dropdown-item v-if="loading">
+                            {{ i18n(searching) }}
+                        </dropdown-item>
+                        <dropdown-item v-else-if="query">
+                            {{ i18n(noResults) }}
+                        </dropdown-item>
+                    </template>
                 </template>
             </dropdown>
         </template>
