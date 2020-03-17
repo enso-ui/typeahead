@@ -1,5 +1,6 @@
 <script>
 import debounce from 'lodash/debounce';
+import Modes from '@enso-ui/search-mode/src/modes';
 
 export default {
     name: 'CoreTypeahead',
@@ -50,6 +51,16 @@ export default {
                 return /(.*?)/;
             },
         },
+        searchMode: {
+            type: String,
+            default: 'full',
+            validator: v => Modes.includes(v),
+        },
+        searchModes: {
+            type: Array,
+            default: () => ['full'],
+            validator: v => v.every(mode => Modes.includes(mode)),
+        },
         source: {
             type: String,
             required: true,
@@ -60,16 +71,20 @@ export default {
         },
     },
 
-    data: () => ({
+    data: v => ({
         items: [],
         loading: false,
+        mode: v.searchMode,
         ongoingRequest: null,
-        query: null,
+        query: '',
     }),
 
     computed: {
         hasError() {
             return this.query && !this.regExp.test(this.query);
+        },
+        modeSelector() {
+            return this.searchModes.length > 1;
         },
         requestParams() {
             return {
@@ -77,6 +92,7 @@ export default {
                     query: this.query,
                     paginate: this.paginate,
                     params: this.params,
+                    searchMode: this.mode,
                 },
                 cancelToken: this.ongoingRequest.token,
             };
@@ -89,7 +105,7 @@ export default {
 
     methods: {
         clear() {
-            this.query = null;
+            this.query = '';
             this.items = [];
         },
         fetch() {
@@ -160,6 +176,16 @@ export default {
             items: this.filter(this.items),
             label: this.label,
             loading: this.loading,
+            modeBindings: {
+                modes: this.searchModes,
+                query: this.query,
+                value: this.mode,
+            },
+            modeEvents: {
+                input: event => (this.mode = event),
+                change: this.fetch,
+            },
+            modeSelector: this.modeSelector,
             query: this.query,
             select: this.select,
         });

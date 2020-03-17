@@ -5,7 +5,8 @@
         ref="typeahead">
         <template v-slot:default="{
                 clearBindings, disabled, hasError, highlight, i18n, inputBindings,
-                inputEvents, itemEvents, items, label, loading, query,
+                inputEvents, itemEvents, items, label, loading, modeSelector,
+                modeBindings, modeEvents, query,
             }">
             <dropdown class="typeahead"
                 :disabled="!query"
@@ -24,6 +25,10 @@
                         <span class="icon is-small is-left">
                             <fa icon="search"/>
                         </span>
+                        <search-mode class="is-right is-small search-mode"
+                            v-bind="modeBindings"
+                            v-on="modeEvents"
+                            v-if="modeSelector"/>
                         <span class="icon is-small is-right clear-button"
                             v-on="clearBindings"
                             v-if="query && !loading">
@@ -44,6 +49,7 @@
                             :highlight="highlight"
                             :item="item"
                             :label="label">
+                            <!-- eslint-disable-next-line vue/no-v-html -->
                             <span v-html="highlight(item[label])"/>
                         </slot>
                     </dropdown-item>
@@ -65,13 +71,16 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown, DropdownItem } from '@enso-ui/dropdown/bulma';
-import CoreTypeahead from '../renderless/Typeahead.vue';
+import SearchMode from '@enso-ui/search-mode/bulma';
+import CoreTypeahead from '../renderless/CoreTypeahead.vue';
 
 library.add(faSearch);
 export default {
     name: 'Typeahead',
 
-    components: { CoreTypeahead, Dropdown, DropdownItem },
+    components: {
+        CoreTypeahead, SearchMode, Dropdown, DropdownItem,
+    },
 
     props: {
         isRounded: {
@@ -106,6 +115,11 @@ export default {
 
         .dropdown-trigger {
             width: 100%;
+
+            .search-mode {
+                pointer-events: all;
+                right: 1.6em;
+            }
         }
 
         .dropdown-menu {

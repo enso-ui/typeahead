@@ -1,3 +1,3 @@
-import Typeahead from '../src/renderless/Typeahead.vue';
+import CoreTypeahead from '../src/renderless/CoreTypeahead.vue';
 
-export default Typeahead;
+export default CoreTypeahead;
