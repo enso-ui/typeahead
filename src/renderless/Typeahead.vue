@@ -63,6 +63,7 @@ export default {
     data: () => ({
         items: [],
         loading: false,
+        ongoingRequest: null,
         query: null,
     }),
 
@@ -77,6 +78,7 @@ export default {
                     paginate: this.paginate,
                     params: this.params,
                 },
+                cancelToken: this.ongoingRequest.token,
             };
         },
     },
@@ -100,6 +102,11 @@ export default {
                 return;
             }
 
+            if (this.ongoingRequest) {
+                this.ongoingRequest.cancel();
+            }
+
+            this.ongoingRequest = axios.CancelToken.source();
             this.loading = true;
 
             axios.get(this.source, this.requestParams)
