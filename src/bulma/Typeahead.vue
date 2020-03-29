@@ -10,7 +10,8 @@
             }">
             <dropdown class="typeahead"
                 :disabled="!query"
-                manual>
+                manual
+                v-on="$listeners">
                 <template v-slot:trigger="{ show }">
                     <div class="control has-icons-left has-icons-right"
                         :class="{ 'is-loading': loading }">
