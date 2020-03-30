@@ -41,7 +41,9 @@
                     <slot name="controls"
                         :items="items"/>
                 </template>
-                <template v-slot:items>
+                <template v-slot:items
+                    :item-events="itemEvents"
+                    :highlight="highlight">
                     <dropdown-item v-for="(item, index) in items"
                         :key="index"
                         :selected="false"
