@@ -21,7 +21,7 @@ export default {
         },
         errorHandler: {
             type: Function,
-            default: (error) => {
+            default: error => {
                 throw error;
             },
         },
@@ -36,6 +36,10 @@ export default {
         label: {
             type: String,
             default: 'label',
+        },
+        minQueryLength: {
+            type: Number,
+            default: 3,
         },
         paginate: {
             type: Number,
@@ -64,10 +68,6 @@ export default {
         source: {
             type: String,
             required: true,
-        },
-        value: {
-            type: [String, Object],
-            default: null,
         },
     },
 
@@ -113,7 +113,7 @@ export default {
                 return;
             }
 
-            if (!this.query) {
+            if (this.query.length < this.minQueryLength) {
                 this.items = [];
                 return;
             }
@@ -129,7 +129,7 @@ export default {
                 .then(({ data }) => {
                     this.items = data;
                     this.loading = false;
-                }).catch((error) => {
+                }).catch(error => {
                     this.loading = false;
                     this.errorHandler(error);
                 });
@@ -160,13 +160,20 @@ export default {
             i18n: this.i18n,
             inputBindings: { value: this.query },
             inputEvents: {
-                input: (e) => {
+                input: e => {
                     this.query = e.target.value;
                     this.fetch();
                 },
-                keyup: (e) => {
-                    if (e.key === 'Escape') {
+                keyup: e => {
+                    switch (e.key) {
+                    case 'Escape':
                         this.clear();
+                        break;
+                    case 'Enter':
+                        this.$emit('search', e.target.value);
+                        break;
+                    default:
+                        break;
                     }
                 },
             },
@@ -176,6 +183,7 @@ export default {
             items: this.filter(this.items),
             label: this.label,
             loading: this.loading,
+            minQueryLength: this.minQueryLength,
             modeBindings: {
                 modes: this.searchModes,
                 query: this.query,

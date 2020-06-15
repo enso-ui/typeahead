@@ -5,14 +5,15 @@
         ref="typeahead">
         <template v-slot:default="{
                 clearBindings, disabled, hasError, highlight, i18n, inputBindings,
-                inputEvents, itemEvents, items, label, loading, modeSelector,
-                modeBindings, modeEvents, query,
+                inputEvents, itemEvents, items, label, loading, minQueryLength,
+                modeSelector, modeBindings, modeEvents, query,
             }">
             <dropdown class="typeahead"
                 :disabled="!query"
+                :disable-controls="items.length === 0"
                 manual
                 v-on="$listeners">
-                <template v-slot:trigger="{ show }">
+                <template v-slot:trigger="{ show, hide }">
                     <div class="control has-icons-left has-icons-right"
                         :class="{ 'is-loading': loading }">
                         <input class="input is-fullwidth"
@@ -21,7 +22,7 @@
                             :disabled="disabled"
                             :placeholder="i18n(placeholder)"
                             v-bind="inputBindings"
-                            @keyup="show"
+                            @keyup="query.length >= minQueryLength ? show() : hide()"
                             v-on="inputEvents">
                         <span class="icon is-small is-left">
                             <fa icon="search"/>
@@ -56,7 +57,7 @@
                             <span v-html="highlight(item[label])"/>
                         </slot>
                     </dropdown-item>
-                    <template v-if="!items.length">
+                    <template v-if="items.length === 0">
                         <dropdown-item v-if="loading">
                             {{ i18n(searching) }}
                         </dropdown-item>
