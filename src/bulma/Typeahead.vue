@@ -52,7 +52,8 @@
                         <slot name="option"
                             :highlight="highlight"
                             :item="item"
-                            :label="label">
+                            :label="label"
+                            :query="query">
                             <!-- eslint-disable-next-line vue/no-v-html -->
                             <span v-html="highlight(item[label])"/>
                         </slot>
