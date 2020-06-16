@@ -88,13 +88,10 @@ export default {
         },
         requestParams() {
             return {
-                params: {
-                    query: this.query,
-                    paginate: this.paginate,
-                    params: this.params,
-                    searchMode: this.mode,
-                },
-                cancelToken: this.ongoingRequest.token,
+                query: this.query,
+                paginate: this.paginate,
+                params: this.params,
+                searchMode: this.mode,
             };
         },
     },
@@ -125,14 +122,16 @@ export default {
             this.ongoingRequest = axios.CancelToken.source();
             this.loading = true;
 
-            axios.get(this.source, this.requestParams)
-                .then(({ data }) => {
-                    this.items = data;
-                    this.loading = false;
-                }).catch(error => {
-                    this.loading = false;
-                    this.errorHandler(error);
-                });
+            axios.get(this.source, {
+                params: this.requestParams,
+                cancelToken: this.ongoingRequest.token,
+            }).then(({ data }) => {
+                this.items = data;
+                this.loading = false;
+            }).catch(error => {
+                this.loading = false;
+                this.errorHandler(error);
+            });
         },
         highlight(item) {
             this.query.split(' ').filter(word => word.length)
