@@ -4,9 +4,10 @@
         v-on="$listeners"
         ref="typeahead">
         <template v-slot:default="{
-                clearBindings, disabled, hasError, highlight, i18n, inputBindings,
-                inputEvents, itemEvents, items, label, loading, minQueryLength,
-                modeSelector, modeBindings, modeEvents, query,
+                clearBindings, controlEvents, disabled, hasError, highlight,
+                i18n, inputBindings, inputEvents, itemEvents, items, label,
+                loading, minQueryLength, modeSelector, modeBindings,
+                modeEvents, query, searchControl,
             }">
             <dropdown class="typeahead"
                 :disabled="!query"
@@ -14,28 +15,37 @@
                 manual
                 v-on="$listeners">
                 <template v-slot:trigger="{ show, hide }">
-                    <div class="control has-icons-left has-icons-right"
-                        :class="{ 'is-loading': loading }">
-                        <input class="input is-fullwidth"
-                            :class="[{ 'is-rounded': isRounded }, { 'is-danger': hasError }]"
-                            type="text"
-                            :disabled="disabled"
-                            :placeholder="i18n(placeholder)"
-                            v-bind="inputBindings"
-                            @keyup="query.length >= minQueryLength ? show() : hide()"
-                            v-on="inputEvents">
-                        <span class="icon is-small is-left">
-                            <fa icon="search"/>
-                        </span>
-                        <search-mode class="is-right is-small search-mode"
-                            v-bind="modeBindings"
-                            v-on="modeEvents"
-                            v-if="modeSelector"/>
-                        <span class="icon is-small is-right clear-button"
-                            v-on="clearBindings"
-                            v-if="query && !loading">
-                            <a class="delete is-small"/>
-                        </span>
+                    <div class="field has-addons">
+                        <div class="control is-expanded has-icons-left has-icons-right"
+                            :class="{ 'is-loading': loading }">
+                            <input class="input is-fullwidth"
+                                :class="[{ 'is-rounded': isRounded }, { 'is-danger': hasError }]"
+                                type="text"
+                                :disabled="disabled"
+                                :placeholder="i18n(placeholder)"
+                                v-bind="inputBindings"
+                                @keyup="query.length >= minQueryLength ? show() : hide()"
+                                v-on="inputEvents">
+                            <span class="icon is-small is-left">
+                                <fa icon="search"/>
+                            </span>
+                            <search-mode class="is-right is-small search-mode"
+                                v-bind="modeBindings"
+                                v-on="modeEvents"
+                                v-if="modeSelector"/>
+                            <span class="icon is-small is-right clear-button"
+                                v-on="clearBindings"
+                                v-if="query && !loading">
+                                <a class="delete is-small"/>
+                            </span>
+                        </div>
+                        <div class="control"
+                            v-if="searchControl">
+                            <a class="button"
+                                v-on="controlEvents">
+                                {{ i18n('Search') }}
+                            </a>
+                        </div>
                     </div>
                 </template>
                 <template v-slot:controls>

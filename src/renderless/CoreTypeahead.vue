@@ -55,6 +55,10 @@ export default {
                 return /(.*?)/;
             },
         },
+        searchControl: {
+            type: Boolean,
+            default: false,
+        },
         searchMode: {
             type: String,
             default: 'full',
@@ -141,6 +145,11 @@ export default {
 
             return item;
         },
+        search() {
+            if (this.query.length > this.minQueryLength) {
+                this.$emit('search', this.query);
+            }
+        },
         select(index) {
             const items = this.filter(this.items);
 
@@ -153,6 +162,9 @@ export default {
     render() {
         return this.$scopedSlots.default({
             clearBindings: { click: this.clear },
+            controlEvents: {
+                click: this.search,
+            },
             disabled: this.disabled,
             hasError: this.hasError,
             highlight: this.highlight,
@@ -169,7 +181,7 @@ export default {
                         this.clear();
                         break;
                     case 'Enter':
-                        this.$emit('search', e.target.value);
+                        this.search();
                         break;
                     default:
                         break;
@@ -194,6 +206,7 @@ export default {
             },
             modeSelector: this.modeSelector,
             query: this.query,
+            searchControl: this.searchControl,
             select: this.select,
         });
     },
