@@ -144,6 +144,10 @@ export default {
         search(item = null) {
             const query = this.query.length > this.minQueryLength ? this.query : null;
 
+            if (item) {
+                this.query = item[this.label];
+            }
+
             if (query || item) {
                 this.$emit('search', { item, query });
             }
@@ -152,7 +156,6 @@ export default {
             const items = this.filter(this.items);
 
             if (items.length) {
-                this.query = items[index][this.label];
                 this.$emit('selected', items[index]);
                 this.search(items[index]);
             }
