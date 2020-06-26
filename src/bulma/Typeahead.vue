@@ -14,7 +14,7 @@
                 :disable-controls="items.length === 0"
                 manual
                 v-on="$listeners">
-                <template v-slot:trigger="{ show, hide }">
+                <template v-slot:trigger="{ show, hide, selection }">
                     <div class="field has-addons">
                         <div class="control is-expanded has-icons-left has-icons-right"
                             :class="{ 'is-loading': loading }">
@@ -25,7 +25,7 @@
                                 :placeholder="i18n(placeholder)"
                                 v-bind="inputBindings"
                                 @keyup="query.length >= minQueryLength ? show() : hide()"
-                                v-on="inputEvents">
+                                v-on="inputEvents(selection)">
                             <span class="icon is-small is-left">
                                 <fa icon="search"/>
                             </span>

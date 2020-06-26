@@ -5,10 +5,6 @@ import Modes from '@enso-ui/search-mode/src/modes';
 export default {
     name: 'CoreTypeahead',
 
-    model: {
-        event: 'selected',
-    },
-
     props: {
         disabled: {
             type: Boolean,
@@ -145,9 +141,11 @@ export default {
 
             return item;
         },
-        search() {
-            if (this.query.length > this.minQueryLength) {
-                this.$emit('search', this.query);
+        search(item = null) {
+            const query = this.query.length > this.minQueryLength ? this.query : null;
+
+            if (query || item) {
+                this.$emit('search', { item, query });
             }
         },
         select(index) {
@@ -156,6 +154,7 @@ export default {
             if (items.length) {
                 this.query = items[index][this.label];
                 this.$emit('selected', items[index]);
+                this.search(items[index]);
             }
         },
     },
@@ -170,24 +169,26 @@ export default {
             highlight: this.highlight,
             i18n: this.i18n,
             inputBindings: { value: this.query },
-            inputEvents: {
+            inputEvents: selection => ({
                 input: e => {
                     this.query = e.target.value;
                     this.fetch();
                 },
-                keyup: e => {
+                keydown: e => {
                     switch (e.key) {
                     case 'Escape':
                         this.clear();
                         break;
                     case 'Enter':
-                        this.search();
+                        if (!selection) {
+                            this.search();
+                        }
                         break;
                     default:
                         break;
                     }
                 },
-            },
+            }),
             itemEvents: index => ({
                 select: () => this.select(index),
             }),
@@ -207,7 +208,6 @@ export default {
             modeSelector: this.modeSelector,
             query: this.query,
             searchControl: this.searchControl,
-            select: this.select,
         });
     },
 };
