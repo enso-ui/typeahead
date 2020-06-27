@@ -142,7 +142,7 @@ export default {
             return item;
         },
         search(item = null) {
-            const query = this.query.length > this.minQueryLength ? this.query : null;
+            const query = this.query.length >= this.minQueryLength ? this.query : null;
 
             if (item) {
                 this.query = item[this.label];
