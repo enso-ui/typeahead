@@ -43,7 +43,7 @@
                             v-if="searchControl">
                             <a class="button"
                                 v-on="controlEvents">
-                                {{ i18n('Search') }}
+                                {{ i18n(search) }}
                             </a>
                         </div>
                     </div>
@@ -113,6 +113,10 @@ export default {
         searching: {
             type: String,
             default: 'Searching...',
+        },
+        search: {
+            type: String,
+            default: 'Search',
         },
     },
 
