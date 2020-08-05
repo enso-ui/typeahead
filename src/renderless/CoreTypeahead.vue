@@ -142,15 +142,16 @@ export default {
             return item;
         },
         search(item = null) {
-            const query = this.query.length >= this.minQueryLength ? this.query : null;
+            if(this.query.length < this.minQueryLength) {
+                return;
+            }
 
             if (item) {
                 this.query = item[this.label];
             }
 
-            if (query || item) {
-                this.$emit('search', { item, query });
-            }
+            this.$emit('search', { item, query });
+            this.query = '';
         },
         select(index) {
             const items = this.filter(this.items);
