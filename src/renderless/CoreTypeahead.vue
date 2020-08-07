@@ -150,7 +150,7 @@ export default {
                 this.query = item[this.label];
             }
 
-            this.$emit('search', { item, query });
+            this.$emit('search', { item, query: this.query });
             this.query = '';
         },
         select(index) {
