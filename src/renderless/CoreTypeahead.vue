@@ -146,10 +146,6 @@ export default {
                 return;
             }
 
-            if (item) {
-                this.query = item[this.label];
-            }
-
             this.$emit('search', { item, query: this.query });
             this.query = '';
         },
