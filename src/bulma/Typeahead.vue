@@ -25,7 +25,8 @@
                                 :placeholder="i18n(placeholder)"
                                 v-bind="inputBindings"
                                 @keyup="query.length >= minQueryLength ? show() : hide()"
-                                v-on="inputEvents(selection)">
+                                v-on="inputEvents(selection)"
+                                ref="input">
                             <span class="icon is-small is-left">
                                 <fa icon="search"/>
                             </span>
@@ -123,6 +124,9 @@ export default {
     methods: {
         clear() {
             this.$refs.typeahead.clear();
+        },
+        focus() {
+            this.$refs.input.focus();
         },
     },
 };
