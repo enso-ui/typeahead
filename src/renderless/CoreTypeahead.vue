@@ -1,5 +1,5 @@
 <script>
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash';
 import Modes from '@enso-ui/search-mode/src/modes';
 
 export default {
@@ -142,7 +142,7 @@ export default {
             return item;
         },
         search(item = null) {
-            if(this.query.length < this.minQueryLength) {
+            if (this.query.length < this.minQueryLength) {
                 return;
             }
 
