@@ -51,7 +51,9 @@
                 </template>
                 <template v-slot:controls>
                     <slot name="controls"
-                        :items="items"/>
+                        :items="items"
+                        :loading="loading"
+                        :query="query"/>
                 </template>
                 <template v-slot:items
                     :item-events="itemEvents"

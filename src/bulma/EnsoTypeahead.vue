@@ -36,6 +36,9 @@ export default {
         clear() {
             this.$refs.typeahead.clear();
         },
+        focus() {
+            this.$refs.typeahead.focus();
+        },
     },
 };
 </script>
