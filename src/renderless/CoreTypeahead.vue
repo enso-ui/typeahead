@@ -69,6 +69,10 @@ export default {
             type: String,
             required: true,
         },
+        taggable: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data: v => ({
@@ -77,14 +81,24 @@ export default {
         mode: v.searchMode,
         ongoingRequest: null,
         query: '',
+        waitingResponse: false,
     }),
 
     computed: {
-        hasError() {
+        canAddTag() {
+            return this.taggable && !!this.query
+                && this.queryDoesntMatch && !this.waitingResponse;
+        },
+        invalidQuery() {
             return this.query && !this.regExp.test(this.query);
         },
         modeSelector() {
             return this.searchModes.length > 1;
+        },
+        queryDoesntMatch() {
+            return !this.items
+                .some(item => `${item[this.label]}`
+                    .toLowerCase() === this.query.toLowerCase());
         },
         requestParams() {
             return {
@@ -96,17 +110,26 @@ export default {
         },
     },
 
+    watch: {
+        query(query) {
+            this.waitingResponse = query !== '';
+        },
+    },
+
     created() {
         this.fetch = debounce(this.fetch, this.debounce);
     },
 
     methods: {
+        addTag() {
+            this.$emit('add-tag', this.query);
+        },
         clear() {
             this.query = '';
             this.items = [];
         },
         fetch() {
-            if (this.hasError) {
+            if (this.invalidQuery) {
                 return;
             }
 
@@ -128,8 +151,10 @@ export default {
             }).then(({ data }) => {
                 this.items = data;
                 this.loading = false;
+                this.waitingResponse = false;
             }).catch(error => {
                 this.loading = false;
+                this.waitingResponse = false;
                 this.errorHandler(error);
             });
         },
@@ -160,12 +185,16 @@ export default {
     },
     render() {
         return this.$scopedSlots.default({
+            addTag: {
+                click: this.addTag,
+            },
+            canAddTag: this.canAddTag,
             clearBindings: { click: this.clear },
             controlEvents: {
                 click: this.search,
             },
             disabled: this.disabled,
-            hasError: this.hasError,
+            invalidQuery: this.invalidQuery,
             highlight: this.highlight,
             i18n: this.i18n,
             inputBindings: { value: this.query },
@@ -180,7 +209,9 @@ export default {
                         this.clear();
                         break;
                     case 'Enter':
-                        if (!selection) {
+                        if (this.canAddTag && e.shiftKey) {
+                            this.addTag();
+                        } else if (!selection) {
                             this.search();
                         }
                         break;
