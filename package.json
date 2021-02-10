@@ -1,6 +1,6 @@
 {
   "name": "@enso-ui/typeahead",
-  "version": "2.1.3",
+  "version": "2.2.0",
   "description": "Vue Typeahead",
   "main": "index.js",
   "scripts": {
