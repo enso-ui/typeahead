@@ -1,6 +1,7 @@
 <template>
     <typeahead :i18n="i18n"
         :source="source ? route(source) : null"
+        :error-handler="errorHandler"
         v-bind="$attrs"
         v-on="$listeners"
         ref="typeahead">
@@ -21,7 +22,7 @@ import Typeahead from './Typeahead.vue';
 export default {
     name: 'EnsoTypeahead',
 
-    inject: ['i18n', 'route'],
+    inject: ['errorHandler', 'i18n', 'route'],
 
     components: { Typeahead },
 
