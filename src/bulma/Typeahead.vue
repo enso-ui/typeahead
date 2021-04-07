@@ -56,7 +56,7 @@
                                 </span>
                             </a>
                         </div>
-                        <div class="control"
+                        <div class="control is-hidden-mobile"
                             v-if="searchControl">
                             <a class="button"
                                 v-on="controlEvents">
