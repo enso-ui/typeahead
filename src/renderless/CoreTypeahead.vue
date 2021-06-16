@@ -124,6 +124,17 @@ export default {
         addTag() {
             this.$emit('add-tag', this.query);
         },
+        bold(label, arg) {
+            let from;
+
+            try {
+                from = new RegExp(`(${arg})`, 'gi');
+            } catch {
+                from = arg;
+            }
+
+            return `${label}`.replace(from, '<b>$1</b>');
+        },
         clear() {
             this.query = '';
             this.items = [];
@@ -159,10 +170,9 @@ export default {
             });
         },
         highlight(item) {
-            this.query.split(' ').filter(word => word.length)
-                .forEach(word => (item = item.replace(
-                    new RegExp(`(${word})`, 'gi'), '<b>$1</b>',
-                )));
+            this.query.split(' ')
+                .filter(arg => arg.length)
+                .forEach(arg => (item = this.bold(item, arg)));
 
             return item;
         },
