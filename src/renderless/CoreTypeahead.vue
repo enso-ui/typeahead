@@ -25,6 +25,10 @@ export default {
             type: Function,
             default: items => (items),
         },
+        forceSelection: {
+            type: Boolean,
+            default: false,
+        },
         i18n: {
             type: Function,
             default: v => v,
@@ -179,6 +183,10 @@ export default {
         search(item = null) {
             if (this.query.length < this.minQueryLength) {
                 return;
+            }
+
+            if (this.forceSelection && !item && this.items.length > 0) {
+                [item] = this.items;
             }
 
             this.$emit('search', { item, query: this.query });
