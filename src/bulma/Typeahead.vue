@@ -1,6 +1,5 @@
 <template>
-    <core-typeahead
-        v-bind="$attrs"
+    <core-typeahead v-bind="$attrs"
         v-on="$listeners"
         ref="typeahead">
         <template v-slot:default="{

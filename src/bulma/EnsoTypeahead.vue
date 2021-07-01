@@ -1,8 +1,8 @@
 <template>
-    <typeahead :i18n="i18n"
+    <typeahead v-bind="$attrs"
+        :i18n="i18n"
         :source="source ? route(source) : null"
         :error-handler="errorHandler"
-        v-bind="$attrs"
         v-on="$listeners"
         ref="typeahead">
         <template v-slot:controls="props">
