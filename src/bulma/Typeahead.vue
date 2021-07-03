@@ -22,10 +22,10 @@
                                     { 'is-rounded': isRounded },
                                     { 'is-danger': invalidQuery || hasError }
                                 ]"
+                                v-bind="inputBindings"
                                 type="text"
                                 :disabled="disabled"
                                 :placeholder="i18n(placeholder)"
-                                v-bind="inputBindings"
                                 @keydown="$emit('keydown', $event)"
                                 @keyup="query.length >= minQueryLength ? show() : hide()"
                                 v-on="inputEvents(selection)"
