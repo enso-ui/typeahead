@@ -3,13 +3,12 @@
         :i18n="i18n"
         :source="source ? route(source) : null"
         :error-handler="errorHandler"
-        v-on="$listeners"
         ref="typeahead">
-        <template #:controls="props">
+        <template #controls="props">
             <slot name="controls"
                 v-bind="props"/>
         </template>
-        <template #:option="props">
+        <template #option="props">
             <slot name="option"
                 v-bind="props"/>
         </template>

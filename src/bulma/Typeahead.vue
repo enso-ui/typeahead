@@ -1,8 +1,7 @@
 <template>
     <core-typeahead v-bind="$attrs"
-        v-on="$listeners"
         ref="typeahead">
-        <template #:default="{
+        <template #default="{
                 addTag, canAddTag, clearBindings, controlEvents, disabled,
                 invalidQuery, highlight, i18n, inputBindings, inputEvents,
                 itemEvents, items, label, loading, minQueryLength,
@@ -11,9 +10,8 @@
             <dropdown class="typeahead"
                 :disabled="!query"
                 :disable-controls="items.length === 0"
-                manual
-                v-on="$listeners">
-                <template #:trigger="{ show, hide, selection }">
+                manual>
+                <template #trigger="{ show, hide, selection }">
                     <div class="field has-addons has-addons-right">
                         <div class="control is-expanded has-icons-left has-icons-right"
                             :class="{ 'is-loading': loading }">
@@ -64,13 +62,13 @@
                         </div>
                     </div>
                 </template>
-                <template #:controls>
+                <template #controls>
                     <slot name="controls"
                         :items="items"
                         :loading="loading"
                         :query="query"/>
                 </template>
-                <template #:items
+                <template #items
                     :item-events="itemEvents"
                     :highlight="highlight">
                     <dropdown-item v-for="(item, index) in items"
