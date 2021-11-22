@@ -79,6 +79,8 @@ export default {
         },
     },
 
+    emits: ['add-tag', 'search', 'selected'],
+
     data: v => ({
         items: [],
         loading: false,
@@ -215,7 +217,7 @@ export default {
             invalidQuery: this.invalidQuery,
             highlight: this.highlight,
             i18n: this.i18n,
-            inputBindings: { value: this.query },
+            inputBindings: { modelValue: this.query },
             inputEvents: selection => ({
                 input: e => {
                     this.query = e.target.value;
@@ -248,10 +250,10 @@ export default {
             modeBindings: {
                 modes: this.searchModes,
                 query: this.query,
-                value: this.mode,
+                modelValue: this.mode,
             },
             modeEvents: {
-                input: event => (this.mode = event),
+                'update:modelValue': event => (this.mode = event),
                 change: this.fetch,
             },
             modeSelector: this.modeSelector,
