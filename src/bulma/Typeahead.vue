@@ -8,6 +8,7 @@
                 modeSelector, modeBindings, modeEvents, query, searchControl,
             }">
             <dropdown class="typeahead"
+                :class="$attrs.class"
                 :disabled="!query"
                 :disable-controls="items.length === 0"
                 manual>
