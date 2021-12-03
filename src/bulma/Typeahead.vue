@@ -142,6 +142,8 @@ export default {
         },
     },
 
+    emits: ['keydown'],
+
     methods: {
         clear() {
             this.$refs.typeahead.clear();
