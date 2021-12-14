@@ -217,7 +217,7 @@ export default {
             invalidQuery: this.invalidQuery,
             highlight: this.highlight,
             i18n: this.i18n,
-            inputBindings: { modelValue: this.query },
+            inputBindings: { value: this.query },
             inputEvents: selection => ({
                 input: e => {
                     this.query = e.target.value;
