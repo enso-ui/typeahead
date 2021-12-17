@@ -49,6 +49,10 @@ export default {
             type: Object,
             default: null,
         },
+        readonly: {
+            type: Boolean,
+            default: false,
+        },
         regExp: {
             type: RegExp,
             default() {
@@ -257,6 +261,7 @@ export default {
                 change: this.fetch,
             },
             modeSelector: this.modeSelector,
+            readonly: this.readonly,
             query: this.query,
             searchControl: this.searchControl,
         });

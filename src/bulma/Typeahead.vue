@@ -5,7 +5,8 @@
                 addTag, canAddTag, clearBindings, controlEvents, disabled,
                 invalidQuery, highlight, i18n, inputBindings, inputEvents,
                 itemEvents, items, label, loading, minQueryLength,
-                modeSelector, modeBindings, modeEvents, query, searchControl,
+                modeSelector, modeBindings, modeEvents,
+                readonly, query, searchControl,
             }">
             <dropdown class="typeahead"
                 :class="$attrs.class"
@@ -23,6 +24,7 @@
                                 ]"
                                 v-bind="inputBindings"
                                 type="text"
+                                :readonly="readonly"
                                 :disabled="disabled"
                                 :placeholder="i18n(placeholder)"
                                 @keydown="$emit('keydown', $event)"
