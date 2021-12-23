@@ -1,5 +1,6 @@
 <template>
     <typeahead v-bind="$attrs"
+        :http="http"
         :i18n="i18n"
         :source="source ? route(source) : null"
         :error-handler="errorHandler"
@@ -23,7 +24,7 @@ export default {
 
     components: { Typeahead },
 
-    inject: ['errorHandler', 'i18n', 'route'],
+    inject: ['errorHandler', 'http', 'i18n', 'route'],
 
     props: {
         source: {

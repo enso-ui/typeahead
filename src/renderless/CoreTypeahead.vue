@@ -29,6 +29,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        http: {
+            required: true,
+            type: Function,
+        },
         i18n: {
             type: Function,
             default: v => v,
@@ -163,10 +167,10 @@ export default {
                 this.ongoingRequest.cancel();
             }
 
-            this.ongoingRequest = axios.CancelToken.source();
+            this.ongoingRequest = this.http.CancelToken.source();
             this.loading = true;
 
-            axios.get(this.source, {
+            this.http.get(this.source, {
                 params: this.requestParams,
                 cancelToken: this.ongoingRequest.token,
             }).then(({ data }) => {
