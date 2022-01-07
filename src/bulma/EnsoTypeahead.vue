@@ -1,5 +1,5 @@
 <template>
-    <typeahead v-bind="$attrs"
+    <typeahead
         :http="http"
         :i18n="i18n"
         :source="source ? route(source) : null"

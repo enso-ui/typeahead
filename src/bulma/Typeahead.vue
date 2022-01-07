@@ -1,5 +1,5 @@
 <template>
-    <core-typeahead v-bind="$attrs"
+    <core-typeahead
         ref="typeahead">
         <template #default="{
                 addTag, canAddTag, clearBindings, controlEvents, disabled,
