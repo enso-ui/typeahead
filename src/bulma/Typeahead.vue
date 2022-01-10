@@ -71,9 +71,7 @@
                         :loading="loading"
                         :query="query"/>
                 </template>
-                <template #items
-                    :item-events="itemEvents"
-                    :highlight="highlight">
+                <template #items>
                     <dropdown-item v-for="(item, index) in items"
                         :key="index"
                         :selected="false"
