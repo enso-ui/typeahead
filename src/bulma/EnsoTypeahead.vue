@@ -1,15 +1,15 @@
 <template>
-    <typeahead v-bind="$attrs"
+    <typeahead
+        :http="http"
         :i18n="i18n"
         :source="source ? route(source) : null"
         :error-handler="errorHandler"
-        v-on="$listeners"
         ref="typeahead">
-        <template v-slot:controls="props">
+        <template #controls="props">
             <slot name="controls"
                 v-bind="props"/>
         </template>
-        <template v-slot:option="props">
+        <template #option="props">
             <slot name="option"
                 v-bind="props"/>
         </template>
@@ -22,9 +22,9 @@ import Typeahead from './Typeahead.vue';
 export default {
     name: 'EnsoTypeahead',
 
-    inject: ['errorHandler', 'i18n', 'route'],
-
     components: { Typeahead },
+
+    inject: ['errorHandler', 'http', 'i18n', 'route'],
 
     props: {
         source: {

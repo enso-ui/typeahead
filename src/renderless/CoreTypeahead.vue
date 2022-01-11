@@ -29,6 +29,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        http: {
+            required: true,
+            type: Function,
+        },
         i18n: {
             type: Function,
             default: v => v,
@@ -48,6 +52,10 @@ export default {
         params: {
             type: Object,
             default: null,
+        },
+        readonly: {
+            type: Boolean,
+            default: false,
         },
         regExp: {
             type: RegExp,
@@ -78,6 +86,8 @@ export default {
             default: false,
         },
     },
+
+    emits: ['add-tag', 'search', 'selected'],
 
     data: v => ({
         items: [],
@@ -157,10 +167,10 @@ export default {
                 this.ongoingRequest.cancel();
             }
 
-            this.ongoingRequest = axios.CancelToken.source();
+            this.ongoingRequest = this.http.CancelToken.source();
             this.loading = true;
 
-            axios.get(this.source, {
+            this.http.get(this.source, {
                 params: this.requestParams,
                 cancelToken: this.ongoingRequest.token,
             }).then(({ data }) => {
@@ -202,7 +212,7 @@ export default {
         },
     },
     render() {
-        return this.$scopedSlots.default({
+        return this.$slots.default({
             addTag: {
                 click: this.addTag,
             },
@@ -248,13 +258,14 @@ export default {
             modeBindings: {
                 modes: this.searchModes,
                 query: this.query,
-                value: this.mode,
+                modelValue: this.mode,
             },
             modeEvents: {
-                input: event => (this.mode = event),
+                'update:modelValue': event => (this.mode = event),
                 change: this.fetch,
             },
             modeSelector: this.modeSelector,
+            readonly: this.readonly,
             query: this.query,
             searchControl: this.searchControl,
         });

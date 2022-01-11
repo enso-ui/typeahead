@@ -1,19 +1,19 @@
 <template>
-    <core-typeahead v-bind="$attrs"
-        v-on="$listeners"
+    <core-typeahead
         ref="typeahead">
-        <template v-slot:default="{
+        <template #default="{
                 addTag, canAddTag, clearBindings, controlEvents, disabled,
                 invalidQuery, highlight, i18n, inputBindings, inputEvents,
                 itemEvents, items, label, loading, minQueryLength,
-                modeSelector, modeBindings, modeEvents, query, searchControl,
+                modeSelector, modeBindings, modeEvents,
+                readonly, query, searchControl,
             }">
             <dropdown class="typeahead"
+                :class="$attrs.class"
                 :disabled="!query"
                 :disable-controls="items.length === 0"
-                manual
-                v-on="$listeners">
-                <template v-slot:trigger="{ show, hide, selection }">
+                manual>
+                <template #trigger="{ show, hide, selection }">
                     <div class="field has-addons has-addons-right">
                         <div class="control is-expanded has-icons-left has-icons-right"
                             :class="{ 'is-loading': loading }">
@@ -24,6 +24,7 @@
                                 ]"
                                 v-bind="inputBindings"
                                 type="text"
+                                :readonly="readonly"
                                 :disabled="disabled"
                                 :placeholder="i18n(placeholder)"
                                 @keydown="$emit('keydown', $event)"
@@ -64,15 +65,13 @@
                         </div>
                     </div>
                 </template>
-                <template v-slot:controls>
+                <template #controls>
                     <slot name="controls"
                         :items="items"
                         :loading="loading"
                         :query="query"/>
                 </template>
-                <template v-slot:items
-                    :item-events="itemEvents"
-                    :highlight="highlight">
+                <template #items>
                     <dropdown-item v-for="(item, index) in items"
                         :key="index"
                         :selected="false"
@@ -101,6 +100,7 @@
 </template>
 
 <script>
+import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown, DropdownItem } from '@enso-ui/dropdown/bulma';
@@ -112,7 +112,7 @@ export default {
     name: 'Typeahead',
 
     components: {
-        CoreTypeahead, SearchMode, Dropdown, DropdownItem,
+        CoreTypeahead, Dropdown, DropdownItem, Fa, SearchMode,
     },
 
     props: {
@@ -141,6 +141,8 @@ export default {
             default: 'Search',
         },
     },
+
+    emits: ['keydown'],
 
     methods: {
         clear() {
