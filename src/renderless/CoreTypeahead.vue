@@ -109,6 +109,9 @@ export default {
         modeSelector() {
             return this.searchModes.length > 1;
         },
+        queryLength() {
+            return this.query.trim();
+        },
         queryDoesntMatch() {
             return !this.items
                 .some(item => `${item[this.label]}`
@@ -158,7 +161,7 @@ export default {
                 return;
             }
 
-            if (this.query.length < this.minQueryLength) {
+            if (this.queryLength < this.minQueryLength) {
                 this.items = [];
                 return;
             }
@@ -191,7 +194,7 @@ export default {
             return item;
         },
         search(item = null) {
-            if (this.query.length < this.minQueryLength) {
+            if (this.queryLength < this.minQueryLength) {
                 return;
             }
 
