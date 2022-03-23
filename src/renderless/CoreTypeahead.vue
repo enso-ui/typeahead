@@ -59,9 +59,7 @@ export default {
         },
         regExp: {
             type: RegExp,
-            default() {
-                return /(.*?)/;
-            },
+            default:() => /(.*?)/,
         },
         searchControl: {
             type: Boolean,
@@ -103,7 +101,11 @@ export default {
                 && !this.loading && this.queryHasNoResults;
         },
         invalidQuery() {
-            return this.query && !this.regExp.test(this.query);
+            return this.query.trim().length < this.minQueryLength
+                || this.invalidRegExp;
+        },
+        invalidRegExp() {
+            return !this.regExp.test(this.query);
         },
         modeSelector() {
             return this.searchModes.length > 1;
@@ -112,9 +114,6 @@ export default {
             return !this.items
                 .some(item => `${item[this.label]}`
                     .toLowerCase() === this.query.toLowerCase());
-        },
-        queryLength() {
-            return this.query.trim().length;
         },
         requestParams() {
             return {
@@ -154,11 +153,6 @@ export default {
                 return;
             }
 
-            if (this.queryLength < this.minQueryLength) {
-                this.items = [];
-                return;
-            }
-
             if (this.ongoingRequest) {
                 this.ongoingRequest.cancel();
             }
@@ -181,7 +175,7 @@ export default {
             return item;
         },
         search(item = null) {
-            if (this.queryLength < this.minQueryLength) {
+            if (this.invalidQuery) {
                 return;
             }
 
@@ -190,6 +184,7 @@ export default {
             }
 
             this.$emit('search', { item, query: this.query });
+
             this.query = '';
         },
         select(index) {
@@ -212,7 +207,7 @@ export default {
                 click: this.search,
             },
             disabled: this.disabled,
-            invalidQuery: this.invalidQuery,
+            invalidRegExp: this.invalidRegExp,
             highlight: this.highlight,
             i18n: this.i18n,
             inputBindings: { value: this.query },
