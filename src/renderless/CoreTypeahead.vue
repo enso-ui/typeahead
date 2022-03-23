@@ -6,14 +6,14 @@ export default {
     name: 'CoreTypeahead',
 
     props: {
-        disabled: {
-            type: Boolean,
-            default: false,
-        },
         debounce: {
             type: Number,
             default: 250,
             validator: v => v > 0,
+        },
+        disabled: {
+            type: Boolean,
+            default: false,
         },
         errorHandler: {
             type: Function,
@@ -95,13 +95,12 @@ export default {
         mode: v.searchMode,
         ongoingRequest: null,
         query: '',
-        waitingResponse: false,
     }),
 
     computed: {
         canAddTag() {
-            return this.taggable && !!this.query
-                && this.queryDoesntMatch && !this.waitingResponse;
+            return this.taggable && this.query !== ''
+                && !this.loading && this.queryHasNoResults;
         },
         invalidQuery() {
             return this.query && !this.regExp.test(this.query);
@@ -109,13 +108,13 @@ export default {
         modeSelector() {
             return this.searchModes.length > 1;
         },
-        queryLength() {
-            return this.query.trim();
-        },
-        queryDoesntMatch() {
+        queryHasNoResults() {
             return !this.items
                 .some(item => `${item[this.label]}`
                     .toLowerCase() === this.query.toLowerCase());
+        },
+        queryLength() {
+            return this.query.trim().length;
         },
         requestParams() {
             return {
@@ -124,12 +123,6 @@ export default {
                 params: this.params,
                 searchMode: this.mode,
             };
-        },
-    },
-
-    watch: {
-        query(query) {
-            this.waitingResponse = query !== '';
         },
     },
 
@@ -176,15 +169,9 @@ export default {
             this.http.get(this.source, {
                 params: this.requestParams,
                 cancelToken: this.ongoingRequest.token,
-            }).then(({ data }) => {
-                this.items = data;
-                this.loading = false;
-                this.waitingResponse = false;
-            }).catch(error => {
-                this.loading = false;
-                this.waitingResponse = false;
-                this.errorHandler(error);
-            });
+            }).then(({ data }) => (this.items = data))
+            .catch(this.errorHandler)
+            .finally(() => (this.loading = false));
         },
         highlight(item) {
             this.query.split(' ')
