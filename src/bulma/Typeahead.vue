@@ -3,7 +3,7 @@
         ref="typeahead">
         <template #default="{
                 addTag, canAddTag, clearBindings, controlEvents, disabled,
-                invalidQuery, highlight, i18n, inputBindings, inputEvents,
+                invalidRegExp, highlight, i18n, inputBindings, inputEvents,
                 itemEvents, items, label, loading, minQueryLength,
                 modeSelector, modeBindings, modeEvents,
                 readonly, query, searchControl,
@@ -20,7 +20,7 @@
                             <input class="input is-fullwidth"
                                 :class="[
                                     { 'is-rounded': isRounded },
-                                    { 'is-danger': invalidQuery || hasError }
+                                    { 'is-danger': invalidRegExp || hasError }
                                 ]"
                                 v-bind="inputBindings"
                                 type="text"
