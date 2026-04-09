@@ -14,7 +14,7 @@
                 :disable-controls="items.length === 0"
                 manual>
                 <template #trigger="{ show, hide, selection }">
-                    <div class="field has-addons has-addons-right">
+                    <div class="field has-addons has-addons-right mt-0">
                         <div class="control is-expanded has-icons-left has-icons-right"
                             :class="{ 'is-loading': loading }">
                             <input class="input is-fullwidth"
@@ -32,7 +32,7 @@
                                 v-on="inputEvents(selection)"
                                 ref="input">
                             <span class="icon is-small is-left">
-                                <fa icon="search"/>
+                                <fa :icon="faSearch"/>
                             </span>
                             <search-mode class="is-right is-small search-mode"
                                 v-bind="modeBindings"
@@ -52,7 +52,7 @@
                                     {{ i18n('Add') }}
                                 </span>
                                 <span class="icon is-small">
-                                    <fa icon="plus"/>
+                                    <fa :icon="faPlus"/>
                                 </span>
                             </a>
                         </div>
@@ -101,19 +101,22 @@
 
 <script>
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown, DropdownItem } from '@enso-ui/dropdown/bulma';
 import SearchMode from '@enso-ui/search-mode/bulma';
 import CoreTypeahead from '../renderless/CoreTypeahead.vue';
 
-library.add(faPlus, faSearch);
 export default {
     name: 'Typeahead',
 
     components: {
         CoreTypeahead, Dropdown, DropdownItem, Fa, SearchMode,
     },
+
+    data: () => ({
+        faPlus,
+        faSearch,
+    }),
 
     props: {
         hasError: {
@@ -161,6 +164,15 @@ export default {
 
         .dropdown-trigger {
             width: 100%;
+
+            .input {
+                background-color: var(--enso-filter-control-surface);
+                color: var(--bulma-input-color);
+
+                &::placeholder {
+                    color: var(--bulma-text-light);
+                }
+            }
 
             .search-mode {
                 pointer-events: all;
