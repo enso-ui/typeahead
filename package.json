@@ -1,6 +1,6 @@
 {
     "name": "@enso-ui/typeahead",
-    "version": "4.1.5",
+    "version": "4.1.6",
     "description": "Typeahead inputs for Enso UI.",
     "main": "index.js",
     "repository": {
