@@ -31,7 +31,7 @@
                                 @keyup="query.length >= minQueryLength ? show() : hide()"
                                 v-on="inputEvents(selection)"
                                 ref="input">
-                            <span class="icon is-left is-dark">
+                            <span class="icon is-left has-text-dark">
                                 <fa :icon="faSearch"/>
                             </span>
                             <search-mode class="is-right is-small search-mode"
