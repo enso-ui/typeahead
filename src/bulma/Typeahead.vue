@@ -165,15 +165,6 @@ export default {
         .dropdown-trigger {
             width: 100%;
 
-            .input {
-                background-color: var(--enso-filter-control-surface);
-                color: var(--bulma-input-color);
-
-                &::placeholder {
-                    color: var(--bulma-text-light);
-                }
-            }
-
             .search-mode {
                 pointer-events: all;
                 right: 1.6em;
